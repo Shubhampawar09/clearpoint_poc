@@ -14,12 +14,12 @@ jobs:
      - name: regression-tests
        uses: cypress-io/github-action@v4
        with:
-         command: npx run test
+         command: npx cypress run
          browser: chrome
 
      - name: Output of the Reports
        if: always()
        uses: actions/upload-artifact@v2
        with:
-         name: TestReport
+         name: TestReport ${{env.date}}
          path: ./cypress/reports
