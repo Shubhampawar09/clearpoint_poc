@@ -1,7 +1,10 @@
 import { utils } from "../../support/Utilities/Utils";
 import { addMeasures } from "../../support/pageObjects/AddMeasures";
 import { customFields } from "../../support/pageObjects/AdminCustomFields";
-import  {addmilestone} from "../../support/pageObjects/AddMilestone";
+import { addmilestone } from "../../support/pageObjects/AddMilestone";
+import { homePage } from "../../support/pageObjects/HomePage";
+import { manageElements } from "../../support/pageObjects/ManageElements";
+import { addObjective } from "../../support/pageObjects/AddObjective";
 
 import "cypress-wait-until";
 const { DEFAULT_USER_EMAIL: email, DEFAULT_USER_PASSWORD: password } =
@@ -67,19 +70,20 @@ describe("verify custom fields name", () => {
       .should("have.text", "This field is too long");
   });
 
-  it.only("add global custom field", () => {
+  it("add global custom field", () => {
     cy.visit("/index");
     customFields.CustomFieldsInitialSteps();
     /*add global custom name*/
     cy.waitUntil(() => utils.clearAndType("#name", title));
     /*save custom global field*/
-    cy.waitUntil(() =>
-      utils.clickOn(addmilestone.addMilestoneSaveButton)
-    );
+    cy.waitUntil(() => utils.clickOn(addmilestone.addMilestoneSaveButton));
     /*verify custom field added */
-    cy.waitUntil(()=>utils
-      .getElement(addMeasures.AlertPopup, { timeout: 2000 })
-      .contains("Custom Field Added").should('be.visible'));
+    cy.waitUntil(() =>
+      utils
+        .getElement(addMeasures.AlertPopup, { timeout: 2000 })
+        .contains("Custom Field Added")
+        .should("be.visible")
+    );
     utils.waitFor(5000);
     /*verify the global custom field in objective list*/
     cy.waitUntil(() =>
@@ -89,9 +93,55 @@ describe("verify custom fields name", () => {
     );
   });
 
-  it('',()=>{
-
-  })
-
-
+  it.only("verify global custom field added to objective", () => {
+    cy.visit("/index");
+    /*select cube element*/
+    utils.getElement(homePage.cubeElement).eq(3).click();
+    /*select scorecard hospital from dropdown*/
+    utils.clickOn(homePage.scorecardDropdown);
+    addMeasures.selectElementFromDropdown("Hospital Scorecard");
+    /*select manage elements from list*/
+    utils
+      .getElement(homePage.manageElements)
+      .should("be.visible", true)
+      .click();
+    /*verify manage element title*/
+    cy.waitUntil(() =>
+      utils
+        .getElement(manageElements.manageElementTitle)
+        .should("be.visible", true)
+    );
+    /*select objective*/
+    cy.waitUntil(() =>
+      utils
+        .getElement(addObjective.addObjectiveElementBox)
+        .eq(0)
+        .should("contain", "Objectives")
+        .click()
+    );
+    /*select objective from list of objectives*/
+    var Objectivename = "Sampl Objective";
+    var objectiveElement =
+      '//div[contains(@class,"drag-drop-list-wrapper")]//a[contains(., "' +
+      Objectivename +
+      '")]';
+    utils
+      .scrollToElement(objectiveElement, { timeout: 10_000 })
+      .should("be.visible", true)
+      .click();
+    utils.waitFor(3000);
+    /*select edit dropdown*/
+    utils.getElement(".dropdown-toggle.btn.btn-primary").eq(1).click();
+    /*selecy edit layout from dropdown*/
+    cy.waitUntil(() =>
+      utils.getElement(".dropdown-menu.show a").contains("Edit Layout").click()
+    );
+    /*type danger in filter type*/
+    utils.clearAndType(".sc-gswNZR.bpVOgy input", "Danger");
+    /*verify the Danger zone custom field */
+    utils
+      .getElement(".list-item-container div.sc-gswNZR.cRJhXY")
+      .contains("Danger zone")
+      .should("be.visible");
+  });
 });
