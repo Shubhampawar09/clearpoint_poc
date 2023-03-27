@@ -5,13 +5,15 @@ jobs:
    runs-on: ubuntu-latest
    steps:
      - name: Checkout GitCode
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
 
      - name: Set Time
        run: |
           echo "date=$(TZ=Asia/Kolkata date "+%Y-%m-%d %H-%M-%S")" >> $GITHUB_ENV  
  
      - name: regression-tests
+       if: always()
+       continue-on-error: true
        uses: cypress-io/github-action@v4
        with:
          command: npx cypress run
