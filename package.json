@@ -1,5 +1,5 @@
 {
-  "name": "ClearPoint",
+  "name": "cypress",
   "version": "1.0.0",
   "description": "This repository is for Cypress POC to demo cypress framework.",
   "main": "index.js",
@@ -14,10 +14,12 @@
     "init": "^0.1.2"
   },
   "devDependencies": {
-    "cypress": "^12.7.0",
+    "cypress": "^12.8.1",
     "cypress-recurse": "^1.27.0",
     "cypress-wait-until": "^1.7.2",
     "cypress-xpath": "^2.0.1",
     "neat-csv": "^5.2.0"
-  }
+  },
+  "author": "",
+  "license": "ISC"
 }
