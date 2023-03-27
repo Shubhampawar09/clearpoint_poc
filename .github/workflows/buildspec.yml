@@ -14,7 +14,7 @@ jobs:
      - name: regression-tests
        uses: cypress-io/github-action@v4
        with:
-         command: npx cypress run
+         command: npm run headless
          browser: chrome
 
      - name: Output of the Reports
