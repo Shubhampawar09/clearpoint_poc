@@ -1,0 +1,16 @@
+# dependencies
+node_modules
+
+# Cypress
+cypress/results/*
+cypress/reports/*
+cypress/screenshots/*
+cypress/videos/*
+
+# OS and misc
+**/.DS_Store
+yarn-error.log
+
+#init-cleanup
+.response-*
+.user
